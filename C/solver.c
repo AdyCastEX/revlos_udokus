@@ -19,8 +19,9 @@ main(){
 		boards[i] = create2Darray(&puzzles[i]);
 	}
 
-	for(i=0;i<num_puzzles;i+=1){
+	for(i=0;i<num_puzzles;i+=1){	
 		printGrid(boards[i],puzzles[i][0]*puzzles[i][0]);
+		solve_puzzle(boards[i],puzzles[i][0]);
 	}
 	
 }
