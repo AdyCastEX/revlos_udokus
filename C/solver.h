@@ -77,7 +77,6 @@ void update_feasible_solution(NumberStack* numStack, int limit, int index, int *
 {
 	int i, k;
 
-	//get the number in the op of stack
 	int x = pop_number(numStack);
 	print_number_stack(numStack,rowSize);
 	printf("x: %d\n",x);
@@ -189,6 +188,7 @@ RowStack * solve_row(int **puzzle, int grid_size, int row_index){
 
 	while(index > -1)
 	{		
+		printf("index: %d\n",index);
 		//index is out of the bounds of the solution
 		if(index >= solution_length){
 			//move back by 1 index
@@ -211,7 +211,7 @@ RowStack * solve_row(int **puzzle, int grid_size, int row_index){
 			}
 		} else if(backtrack == 0){ //forwardtracking mode
 			//push all candidate numbers
-			push_candidate_numbers(stack_set[index],puzzle,row_index,col_indices[index],grid_size);
+			push_candidate_numbers(stack_set[index],temp_puzzle,row_index,col_indices[index],grid_size);
 			//there was no number that met the condition
 			if(num_stack_is_empty(stack_set[index]) == 1){
 				index -= 1;
@@ -222,11 +222,11 @@ RowStack * solve_row(int **puzzle, int grid_size, int row_index){
 			}
 		}
 
-		print_array(temp_puzzle[row_index],grid_size);
-		printf("\n");
+		//print_array(temp_puzzle[row_index],grid_size*grid_size);
+		//printf("\n");
 	}
 	print_row_stack(rs);
-	//print_array(candidates,solution_length);
+	return rs;
 }
 
 int solve_puzzle(int **puzzle,int grid_size){
@@ -242,9 +242,45 @@ int solve_puzzle(int **puzzle,int grid_size){
 	*/
 
 	int i;
+	int index;
 	int colSize = grid_size*grid_size;
+	int ** temp_puzzle;
+	int backtrack;
 
 	RowStack **candidate_rows = (RowStack **) malloc(sizeof(RowStack *)*colSize);
+
+	index = 0;
+	backtrack = 0;
 	//create_row_stack();
-	solve_row(puzzle, grid_size, 0);
+	temp_puzzle = copy_puzzle(puzzle,grid_size*grid_size);
+
+	/*while (index > -1){
+
+		if(index >= colSize){
+			backtrack = 1;
+			index -= 1;
+			continue;
+		}
+
+		if(backtrack == 1){
+			if(row_stack_is_empty(candidate_rows[index]))
+		} else if(backtrack == 0){
+
+		}
+	*/
+		candidate_rows[index] = solve_row(temp_puzzle, grid_size, index);
+		temp_puzzle = add_row_to_puzzle(temp_puzzle,pop_row(candidate_rows[index]),grid_size*grid_size,index);
+		print_matrix(temp_puzzle,grid_size*grid_size);
+		index += 1;
+	//}
+	/*index += 1;
+	candidate_rows[index] = solve_row(temp_puzzle,grid_size,index);
+	temp_puzzle = add_row_to_puzzle(temp_puzzle,pop_row(candidate_rows[index]),grid_size*grid_size,index);
+	print_matrix(temp_puzzle,grid_size*grid_size);
+
+	index += 1;
+	candidate_rows[index] = solve_row(temp_puzzle,grid_size,index);
+	temp_puzzle = add_row_to_puzzle(temp_puzzle,pop_row(candidate_rows[index]),grid_size*grid_size,index);
+	print_matrix(temp_puzzle,grid_size*grid_size);
+	*/
 }
