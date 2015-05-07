@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <malloc.h>
-#include "board.h"
 #include "checker.h"
 #include "stack.h"
 
@@ -22,6 +21,32 @@ int ** copy_puzzle(int ** source, int size){
 	return destination;
 }
 
+void initialize_stacks(int * row,int row_size,NumberStack ***stack_set,int row_index,int **col_indices){
+	int i,num_zeros=0;
+	int counter=0;
+	for(i=0;i<row_size;i+=1){
+		if(row[i] == 0){
+			num_zeros += 1;
+		}
+	}
+	printf("num zeros: %d\n",num_zeros);
+
+	(*col_indices) = (int *)malloc(sizeof(int)*num_zeros);
+
+	for(i=0;i<row_size;i+=1){
+		if(row[i] == 0){
+			(*col_indices)[counter] = i;
+			counter += 1;
+		}
+	}
+
+	(*stack_set) = (NumberStack **)malloc(sizeof(NumberStack*)*num_zeros);
+
+	for(i=0;i<num_zeros;i+=1){
+		(*stack_set)[i] = create_number_stack(row_size);
+		printf("col: %d\n",(*col_indices)[i]);
+	}
+}
 /**
  * Params
  * numStack => holds the candidates
