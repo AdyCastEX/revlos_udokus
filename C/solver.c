@@ -7,21 +7,17 @@ main(){
 
 	int **puzzles;
 	int ***boards;
+	int *subgrids;
 	int num_puzzles;
 	int i,j;
 
 	char filename[] = "puzzle.in";
 
-	puzzles = createBoard(&num_puzzles,filename);
-	boards = (int ***)malloc(sizeof(int **)*num_puzzles);
-
-	for(i=0;i<num_puzzles;i+=1){
-		boards[i] = create2Darray(&puzzles[i]);
-	}
+	boards = createBoard(&num_puzzles,&subgrids,filename);
 
 	for(i=0;i<num_puzzles;i+=1){	
-		printGrid(boards[i],puzzles[i][0]*puzzles[i][0]);
-		solve_puzzle(boards[i],puzzles[i][0]);
+		printGrid(boards[i],subgrids[i]*subgrids[i]);
+		solve_puzzle(boards[i],subgrids[i]);
 	}
 	
 }
