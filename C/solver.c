@@ -5,10 +5,22 @@
 
 main(){
 
-	int noRow = 9;
-	int noCol = 9;
-	int gridSize = 3;
+	int **puzzles;
+	int ***boards;
+	int num_puzzles;
 	int i,j;
 
+	char filename[] = "puzzle.in";
+
+	puzzles = createBoard(&num_puzzles,filename);
+	boards = (int ***)malloc(sizeof(int **)*num_puzzles);
+
+	/*for(i=0;i<num_puzzles;i+=1){
+		boards[i] = create2Darray(&puzzles[i]);
+	}
+
+	for(i=0;i<num_puzzles;i+=1){
+		printGrid(boards[i],puzzles[i][0]*puzzles[i][0]);
+	}*/
 	
 }
