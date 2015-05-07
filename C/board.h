@@ -1,3 +1,4 @@
+
 int **createBoard(int *numPuz, char *filename){
 FILE *fp;
 char *arr, ch;
