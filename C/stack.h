@@ -132,7 +132,7 @@ int pop_number(NumberStack *ns){
 
 	int n;
 
-	n = ns->arr[ns->top];
+	n = ns->arr[ns->top-1];
 	ns->top -= 1;
 	ns->size -= 1;
 

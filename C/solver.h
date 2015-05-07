@@ -21,7 +21,7 @@ int ** copy_puzzle(int ** source, int size){
 	return destination;
 }
 
-void initialize_stacks(int * row,int row_size,NumberStack ***stack_set,int row_index,int **col_indices){
+void initialize_stacks(int * row,int row_size,NumberStack ***stack_set,int row_index,int **col_indices,int *solution_length){
 	int i,num_zeros=0;
 	int counter=0;
 	for(i=0;i<row_size;i+=1){
@@ -30,7 +30,7 @@ void initialize_stacks(int * row,int row_size,NumberStack ***stack_set,int row_i
 		}
 	}
 	printf("num zeros: %d\n",num_zeros);
-
+	(*solution_length) = num_zeros;
 	(*col_indices) = (int *)malloc(sizeof(int)*num_zeros);
 
 	for(i=0;i<row_size;i+=1){
@@ -44,7 +44,7 @@ void initialize_stacks(int * row,int row_size,NumberStack ***stack_set,int row_i
 
 	for(i=0;i<num_zeros;i+=1){
 		(*stack_set)[i] = create_number_stack(row_size);
-		printf("col: %d\n",(*col_indices)[i]);
+		//printf("col: %d\n",(*col_indices)[i]);
 	}
 }
 /**
@@ -54,16 +54,18 @@ void initialize_stacks(int * row,int row_size,NumberStack ***stack_set,int row_i
  * index => index for the arrOfCandidates
  * arrOfCandidates => array that holds the candidates that can replace the 0 on row of puzzle
  */
-void update_feassible_solution(NumberStack* numStack, int limit, int index, int *puzzle, int rowSize, int **arrOfCandidates, RowStack *rs)
+void update_feasible_solution(NumberStack* numStack, int limit, int index, int **puzzle, int rowSize, int **arrOfCandidates, RowStack *rs,int row)
 {
 	int i, k;
 
 	//get the number in the op of stack
 	int x = pop_number(numStack);
+	print_number_stack(numStack,rowSize);
+	printf("x: %d\n",x);
 	(*arrOfCandidates)[index] = x;
 
 	//check if the limit or the number of 0 is reached
-	if(limit == index)
+	//if(limit == index)
 	{
 		//create row to be pushed to rs
 		int *numRow = (int *) malloc(sizeof(int)*rowSize);
@@ -76,9 +78,27 @@ void update_feassible_solution(NumberStack* numStack, int limit, int index, int 
 				numRow[i] = puzzle[row][i];
 			else
 				numRow[i] = (*arrOfCandidates)[k++];
-		}
 
+			printf("%d ", numRow[i]);
+		}
+		printf("\n");
 		push_row(rs, numRow);
+
+	}
+}
+
+void push_candidate_numbers(NumberStack *ns,int ** puzzle,int row, int col, int subgrid_size){
+	int i;
+	int grid_size;
+
+	grid_size = subgrid_size * subgrid_size;
+	for(i=0;i<grid_size;i+=1){
+		//printf("check row %d: %d\n",i,checkRow(grid_size, row, puzzle,i));
+		//printf("check col %d: %d\n",i,checkColumn(grid_size, row, puzzle,i));
+		//printf("check grid %d: %d\n",i,checkGrid(subgrid_size,puzzle,row,col,i));
+		if(checkRow(grid_size, row, puzzle,i) == 1 && checkColumn(col, grid_size, puzzle, i) == 1 && checkGrid(subgrid_size, puzzle, row, col,i) == 1){
+			push_number(ns,i);
+		}
 	}
 }
 
@@ -111,7 +131,7 @@ int **add_row_to_puzzle(int **puzzle, int *arrRow, int rowSize, int indexRow)
 	return newPuzzle;
 }
 
-RowStack * solve_row(int **puzzle,int * row, int grid_size){
+RowStack * solve_row(int **puzzle, int grid_size, int row_index){
 	/*
 		solves a row of a sudoku puzzle
 
@@ -125,8 +145,23 @@ RowStack * solve_row(int **puzzle,int * row, int grid_size){
 	*/
 
 	int ** temp_puzzle;
+	int * col_indices;
+	int num_stacks;
+	NumberStack ** stack_set;
+	int * candidates;
+	int solution_length;
 
+	RowStack * rs;
+	rs = create_row_stack(grid_size*grid_size);
+
+	initialize_stacks(puzzle[row_index],grid_size*grid_size,&stack_set,row_index,&col_indices,&num_stacks);
 	temp_puzzle = copy_puzzle(puzzle,grid_size*grid_size);
+
+
+	push_candidate_numbers(stack_set[0],puzzle,0,1,grid_size);
+	candidates = (int *)malloc(sizeof(int)*solution_length);
+	update_feasible_solution(stack_set[0],solution_length,0,puzzle, grid_size * grid_size, &candidates,rs,0);
+	//print_array(candidates,solution_length);
 }
 
 int solve_puzzle(int **puzzle,int grid_size){
