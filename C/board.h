@@ -33,32 +33,29 @@ int **puzzle,subgrid,i,j,k=1;
 			}			
 			printf("\n");
 		}
+		fclose(fp);
 		return puzzle;
 	}
 }
 
-void printPuzzle(int **puzzle, int numPuz){
-int i,j,k;
-	for(i=0;i<numPuz;i++){
-		j=puzzle[i][0];
-		printf("subGrid : %d\n",j);
-		printf("gridSize : %d\n",j*j*j*j);
-		for(k=1;k<=j*j*j*j;k++){
-			printf("%d ",puzzle[i][k]);
-			if(k%(j*j)==0) printf("\n");
-		}
-		printf("\n");
-	}
-}
-
+//print array to file
 void printGrid(int **puzzle, int rowCol){
 int i,j;
-	for(i=0;i<rowCol;i++){
-		for(j=0;j<rowCol;j++){
-			printf("%d ",puzzle[i][j]);
+FILE *fp;
+	fp = fopen("output","a");
+	if(fp==NULL){
+		printf("File not found.\n");
+	}else{
+		for(i=0;i<rowCol;i++){
+			for(j=0;j<rowCol;j++){
+			//	printf("%d ",puzzle[i][j]);
+				fprintf(fp,"%d ",puzzle[i][j]);
+			}
+		//	printf("\n");
+			fprintf(fp,"\n");
 		}
-		printf("\n");
 	}
+	fclose(fp);
 }
 
 int** create2Darray(int **puzzle){
