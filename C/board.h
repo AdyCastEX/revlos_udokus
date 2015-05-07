@@ -42,7 +42,7 @@ int **puzzle,subgrid,i,j,k=1;
 void printGrid(int **puzzle, int rowCol){
 int i,j;
 FILE *fp;
-	fp = fopen("output","a");
+	fp = fopen("output","w");
 	if(fp==NULL){
 		printf("File not found.\n");
 	}else{
