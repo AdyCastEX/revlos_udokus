@@ -21,6 +21,25 @@ int ** copy_puzzle(int ** source, int size){
 	return destination;
 }
 
+void print_array(int *arr,int size){
+	int i;
+
+	for(i=0;i<size;i+=1){
+		printf("%3d\n",arr[i]);
+	}
+}
+
+void print_matrix(int ** matrix,int size){
+	int i,j;
+
+	for(i=0;i<size;i+=1){
+		for(j=0;j<size;j+=1){
+			printf("%3d",matrix[i][j]);
+		}
+		printf("\n");
+	}
+}
+
 void initialize_stacks(int * row,int row_size,NumberStack ***stack_set,int row_index,int **col_indices,int *solution_length){
 	int i,num_zeros=0;
 	int counter=0;
@@ -158,29 +177,53 @@ RowStack * solve_row(int **puzzle, int grid_size, int row_index){
 	temp_puzzle = copy_puzzle(puzzle,grid_size*grid_size);
 	initialize_stacks(puzzle[row_index],grid_size*grid_size,&stack_set,row_index,&col_indices,&num_stacks);
 	solution_length = num_stacks;
+
 	int index = 0;
 	int i;
+	int backtrack = 0; //flag to indicate whether in backtrack mode or not
 	
 	candidates = (int *)malloc(sizeof(int)*solution_length);
+	for(i=0;i<solution_length;i+=1){
+		candidates[i] = 0;
+	}
 
-	while(index != -1)
-	//for(index=0; index<5; index++)
+	while(index > -1)
 	{		
-		if((index == solution_length) || num_stack_is_empty(stack_set[index]) == 1)
-		{
-			index--;
-			
-			if(num_stack_is_empty(stack_set[index]) == 0)
-			{
-				pop_number(stack_set[index]);
+		//index is out of the bounds of the solution
+		if(index >= solution_length){
+			//move back by 1 index
+			index -= 1;
+			//activate backtrack mode
+			backtrack = 1;
+			continue;
+		}
+		//if in backtracking mode
+		if(backtrack == 1){
+			if(num_stack_is_empty(stack_set[index]) == 1){
+				index -= 1;
+				temp_puzzle[row_index][col_indices[index]] = 0; //set to zero
+			} else {
+				//there is still a candidate number from previous iterations
+				update_feasible_solution(stack_set[index],solution_length,index,&temp_puzzle, grid_size * grid_size, &candidates,rs,row_index, col_indices[index]);
+				index += 1;
+				//go out of backtracking mode
+				backtrack = 0;
+			}
+		} else if(backtrack == 0){ //forwardtracking mode
+			//push all candidate numbers
+			push_candidate_numbers(stack_set[index],puzzle,row_index,col_indices[index],grid_size);
+			//there was no number that met the condition
+			if(num_stack_is_empty(stack_set[index]) == 1){
+				index -= 1;
+				backtrack = 1;
+			} else {
+				update_feasible_solution(stack_set[index],solution_length,index,&temp_puzzle, grid_size * grid_size, &candidates,rs,row_index, col_indices[index]);
+				index += 1;
 			}
 		}
-		else
-		{
-			push_candidate_numbers(stack_set[index],puzzle,row_index,col_indices[index],grid_size);
-			update_feasible_solution(stack_set[index],solution_length,index,&temp_puzzle, grid_size * grid_size, &candidates,rs,row_index, col_indices[index]);
-			index ++;
-		}
+
+		print_array(temp_puzzle[row_index],grid_size);
+		printf("\n");
 	}
 	print_row_stack(rs);
 	//print_array(candidates,solution_length);
