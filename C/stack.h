@@ -280,8 +280,10 @@ int * pop_row(RowStack *rs){
 			//set the second to the last node as the tail
 			rs->tail = temp1;
 			//disconnect the previous tail
+			free(temp1->next);
 			temp1->next = NULL;
 		} else if(temp1 == temp2){ //if there is only one node left set both head and tail to NULL
+			free(rs->head);
 			rs->head = NULL;
 			rs->tail = NULL;
 		}

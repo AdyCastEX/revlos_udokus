@@ -30,3 +30,6 @@ t files
 
 # Debug files
 *.dSYM/
+
+/test_files
+/C/test_files
