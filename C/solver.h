@@ -21,6 +21,25 @@ int ** copy_puzzle(int ** source, int size){
 	return destination;
 }
 
+void print_array(int *arr,int size){
+	int i;
+
+	for(i=0;i<size;i+=1){
+		printf("%3d\n",arr[i]);
+	}
+}
+
+void print_matrix(int ** matrix,int size){
+	int i,j;
+
+	for(i=0;i<size;i+=1){
+		for(j=0;j<size;j+=1){
+			printf("%3d",matrix[i][j]);
+		}
+		printf("\n");
+	}
+}
+
 void initialize_stacks(int * row,int row_size,NumberStack ***stack_set,int row_index,int **col_indices,int *solution_length){
 	int i,num_zeros=0;
 	int counter=0;
@@ -164,8 +183,11 @@ RowStack * solve_row(int **puzzle, int grid_size, int row_index){
 	int backtrack = 0; //flag to indicate whether in backtrack mode or not
 	
 	candidates = (int *)malloc(sizeof(int)*solution_length);
+	for(i=0;i<solution_length;i+=1){
+		candidates[i] = 0;
+	}
 
-	while(index != -1)
+	while(index > -1)
 	{		
 		//index is out of the bounds of the solution
 		if(index >= solution_length){
@@ -199,6 +221,9 @@ RowStack * solve_row(int **puzzle, int grid_size, int row_index){
 				index += 1;
 			}
 		}
+
+		print_array(temp_puzzle[row_index],grid_size);
+		printf("\n");
 	}
 	print_row_stack(rs);
 	//print_array(candidates,solution_length);

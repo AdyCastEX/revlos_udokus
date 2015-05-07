@@ -132,9 +132,12 @@ int pop_number(NumberStack *ns){
 
 	int n;
 
-	n = ns->arr[ns->top-1];
-	ns->top -= 1;
-	ns->size -= 1;
+	if(num_stack_is_empty(ns) == 0){
+		n = ns->arr[ns->top-1];
+		ns->top -= 1;
+		ns->size -= 1;
+	}
+	
 
 	return n;
 }
