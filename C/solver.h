@@ -48,7 +48,7 @@ void initialize_stacks(int * row,int row_size,NumberStack ***stack_set,int row_i
 			num_zeros += 1;
 		}
 	}
-	printf("num zeros: %d\n",num_zeros);
+	//printf("num zeros: %d\n",num_zeros);
 	(*solution_length) = num_zeros;
 	(*col_indices) = (int *)malloc(sizeof(int)*num_zeros);
 
@@ -78,8 +78,8 @@ void update_feasible_solution(NumberStack* numStack, int limit, int index, int *
 	int i, k;
 
 	int x = pop_number(numStack);
-	print_number_stack(numStack,rowSize);
-	printf("x: %d\n",x);
+	//print_number_stack(numStack,rowSize);
+	//printf("x: %d\n",x);
 	(*arrOfCandidates)[index] = x;
 	
 	(*puzzle)[row][col] = x;
@@ -99,9 +99,9 @@ void update_feasible_solution(NumberStack* numStack, int limit, int index, int *
 			else
 				numRow[i] = (*arrOfCandidates)[k++];
 
-			printf("%d ", numRow[i]);
+			//printf("%d ", numRow[i]);
 		}
-		printf("\n");
+		//printf("\n");
 		push_row(rs, numRow);
 	}
 }
@@ -111,7 +111,7 @@ void push_candidate_numbers(NumberStack *ns,int ** puzzle,int row, int col, int 
 	int grid_size;
 
 	grid_size = subgrid_size * subgrid_size;
-	for(i=0;i<grid_size;i+=1){
+	for(i=1;i<=grid_size;i+=1){
 		//printf("check row %d: %d\n",i,checkRow(grid_size, row, puzzle,i));
 		//printf("check col %d: %d\n",i,checkColumn(grid_size, row, puzzle,i));
 		//printf("check grid %d: %d\n",i,checkGrid(subgrid_size,puzzle,row,col,i));
@@ -188,7 +188,7 @@ RowStack * solve_row(int **puzzle, int grid_size, int row_index){
 
 	while(index > -1)
 	{		
-		printf("index: %d\n",index);
+		//printf("number index: %d\n",index);
 		//index is out of the bounds of the solution
 		if(index >= solution_length){
 			//move back by 1 index
@@ -200,8 +200,9 @@ RowStack * solve_row(int **puzzle, int grid_size, int row_index){
 		//if in backtracking mode
 		if(backtrack == 1){
 			if(num_stack_is_empty(stack_set[index]) == 1){
-				index -= 1;
+				
 				temp_puzzle[row_index][col_indices[index]] = 0; //set to zero
+				index -= 1;
 			} else {
 				//there is still a candidate number from previous iterations
 				update_feasible_solution(stack_set[index],solution_length,index,&temp_puzzle, grid_size * grid_size, &candidates,rs,row_index, col_indices[index]);
@@ -225,7 +226,7 @@ RowStack * solve_row(int **puzzle, int grid_size, int row_index){
 		//print_array(temp_puzzle[row_index],grid_size*grid_size);
 		//printf("\n");
 	}
-	print_row_stack(rs);
+	//print_row_stack(rs);
 	return rs;
 }
 
@@ -246,6 +247,7 @@ int solve_puzzle(int **puzzle,int grid_size){
 	int colSize = grid_size*grid_size;
 	int ** temp_puzzle;
 	int backtrack;
+	int num_solutions = 0;
 
 	RowStack **candidate_rows = (RowStack **) malloc(sizeof(RowStack *)*colSize);
 
@@ -254,25 +256,49 @@ int solve_puzzle(int **puzzle,int grid_size){
 	//create_row_stack();
 	temp_puzzle = copy_puzzle(puzzle,grid_size*grid_size);
 
-	/*while (index > -1){
+	while (index > -1){
+		
 
+		//printf("row_index : %d\n",index);
 		if(index >= colSize){
 			backtrack = 1;
 			index -= 1;
+			if(index == colSize-1)
+			{	
+				print_matrix(temp_puzzle,grid_size*grid_size);
+				printf("\n");
+				num_solutions += 1;
+			}
 			continue;
 		}
 
 		if(backtrack == 1){
-			if(row_stack_is_empty(candidate_rows[index]))
+			if(row_stack_is_empty(candidate_rows[index]) == 1){
+				temp_puzzle = add_row_to_puzzle(temp_puzzle,puzzle[index], colSize, index); //reset to orig row
+				index -= 1;
+				
+			} else{
+				temp_puzzle = add_row_to_puzzle(temp_puzzle,pop_row(candidate_rows[index]),grid_size*grid_size,index);
+				//print_matrix(temp_puzzle,grid_size*grid_size);
+				index += 1;
+				backtrack = 0;
+			}
 		} else if(backtrack == 0){
+			//print_matrix(temp_puzzle,grid_size*grid_size);
+			candidate_rows[index] = solve_row(temp_puzzle, grid_size, index);
 
+			if(row_stack_is_empty(candidate_rows[index]) == 1){
+				index -= 1;
+				backtrack = 1;
+			} else{
+				temp_puzzle = add_row_to_puzzle(temp_puzzle,pop_row(candidate_rows[index]),grid_size*grid_size,index);
+				//print_matrix(temp_puzzle,grid_size*grid_size);
+				index += 1;
+			}
 		}
-	*/
-		candidate_rows[index] = solve_row(temp_puzzle, grid_size, index);
-		temp_puzzle = add_row_to_puzzle(temp_puzzle,pop_row(candidate_rows[index]),grid_size*grid_size,index);
-		print_matrix(temp_puzzle,grid_size*grid_size);
-		index += 1;
-	//}
+		//print_matrix(temp_puzzle,grid_size*grid_size);
+	}
+	return num_solutions;
 	/*index += 1;
 	candidate_rows[index] = solve_row(temp_puzzle,grid_size,index);
 	temp_puzzle = add_row_to_puzzle(temp_puzzle,pop_row(candidate_rows[index]),grid_size*grid_size,index);
