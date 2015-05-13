@@ -52,18 +52,27 @@ int checkGrid(int gridSize, int **puzzle, int row, int col, int x)
 /**
  * Checks if an element is found in the diagonals of the sudoku board
  */
-int checkX(int noRow, int **puzzle, int x)
+int checkX(int noRow, int **puzzle, int x, int row, int col)
 {
 	int i;
 
-	for(i=0; i<noRow; i++)
+	if(row == col)
 	{
-		// for the negative sloped line of the X
-		if(puzzle[i][i] == x)
-			return 0;
-		// for the positive sloped line of the X
-		if(puzzle[i][(noRow-1)-i] == x)
-			return 0;
+		for(i=0; i<noRow; i++)
+		{
+			// for the negative sloped line of the X
+			if(puzzle[i][i] == x)
+				return 0;
+		}
+	}
+	else if(col == (noRow-1-row))
+	{
+		for(i=0; i<noRow; i++)
+		{
+			// for the positive sloped line of the X
+			if(puzzle[i][(noRow-1)-i] == x)
+				return 0;
+		}
 	}
 	return 1;
 }
@@ -72,28 +81,61 @@ int checkX(int noRow, int **puzzle, int x)
  * For odd numbered gridSize
   * Checks if an element is found in the Y locations of the sudoku board
  */
-int checkY(int noRow, int **puzzle, int x)
+int checkY(int noRow, int **puzzle, int x, int row, int col)
 {
-	int i;
-	int k = (noRow-1)/2;
-
-	for(i=0; i<noRow; i++)
+	if((noRow%2) != 0)
 	{
-		// for the upper part of the Y
-		if(i <= k)
-		{	
-			// left line of the Y
-			if(puzzle[i][i] == x)
-				return 0;
-			// right line of the Y
-			if(puzzle[i][(noRow-1)-i] == x)
-				return 0;
-		}
-		else	// for the lower part of the Y
+		int i;
+		int k = (noRow-1)/2;
+
+		if((row == col && row < k) || (col == k && row > k))
 		{
-			if(puzzle[i][k] == x)
-				return 0;
+			for(i=0; i<noRow; i++)
+			{
+				// for the upper part of the Y
+				if(i < k)
+				{	
+					// left line of the Y
+					if(puzzle[i][i] == x)
+					{
+						return 0;
+					}
+				}
+				else	// for the lower part of the Y
+				{
+					if(puzzle[i][k] == x)
+					{
+						return 0;
+					}
+				}
+			}
 		}
+
+		if((col == (noRow-1-row) && row < k) || (col == k && row > k))
+		{
+			for(i=0; i<noRow; i++)
+			{
+				// for the upper part of the Y
+				if(i < k)
+				{	
+					// right line of the Y
+					if(puzzle[i][(noRow-1)-i] == x)
+					{
+						return 0;
+					}
+				}
+				else	// for the lower part of the Y
+				{
+					if(puzzle[i][k] == x)
+					{
+						return 0;
+					}
+				}
+			}
+		}
+
+		return 1;
 	}
-	return 1;
+	else
+		return 0;
 }

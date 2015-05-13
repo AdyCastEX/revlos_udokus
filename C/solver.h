@@ -106,17 +106,33 @@ void update_feasible_solution(NumberStack* numStack, int limit, int index, int *
 	}
 }
 
-void push_candidate_numbers(NumberStack *ns,int ** puzzle,int row, int col, int subgrid_size){
+void push_candidate_numbers(NumberStack *ns,int ** puzzle,int row, int col, int subgrid_size, int type){
 	int i;
 	int grid_size;
 
 	grid_size = subgrid_size * subgrid_size;
 	for(i=1;i<=grid_size;i+=1){
-		//printf("check row %d: %d\n",i,checkRow(grid_size, row, puzzle,i));
-		//printf("check col %d: %d\n",i,checkColumn(grid_size, row, puzzle,i));
-		//printf("check grid %d: %d\n",i,checkGrid(subgrid_size,puzzle,row,col,i));
 		if(checkRow(grid_size, row, puzzle,i) == 1 && checkColumn(col, grid_size, puzzle, i) == 1 && checkGrid(subgrid_size, puzzle, row, col,i) == 1){
-			push_number(ns,i);
+			if(type == 1)
+			{
+				if(checkX(grid_size, puzzle, i, row, col) == 1)
+				{
+					push_number(ns,i);
+				}
+			}
+			else if(type == 2)
+			{
+				//printf("row: %d; col:%d\n", row, col);
+				if(checkY(grid_size, puzzle, i, row, col) == 1)
+					push_number(ns,i);
+			}
+			else if(type == 3)
+			{
+				if(checkY(grid_size, puzzle, i, row, col) == 1 && checkX(grid_size, puzzle, i, row, col) == 1)
+					push_number(ns,i);
+			}
+			else
+				push_number(ns,i);
 		}
 	}
 }
@@ -150,7 +166,7 @@ int **add_row_to_puzzle(int **puzzle, int *arrRow, int rowSize, int indexRow)
 	return newPuzzle;
 }
 
-RowStack * solve_row(int **puzzle, int grid_size, int row_index){
+RowStack * solve_row(int **puzzle, int grid_size, int row_index, int type){
 	/*
 		solves a row of a sudoku puzzle
 
@@ -187,7 +203,7 @@ RowStack * solve_row(int **puzzle, int grid_size, int row_index){
 	}
 
 	while(index > -1)
-	{		
+	{			
 		//printf("number index: %d\n",index);
 		//index is out of the bounds of the solution
 		if(index >= solution_length){
@@ -212,7 +228,7 @@ RowStack * solve_row(int **puzzle, int grid_size, int row_index){
 			}
 		} else if(backtrack == 0){ //forwardtracking mode
 			//push all candidate numbers
-			push_candidate_numbers(stack_set[index],temp_puzzle,row_index,col_indices[index],grid_size);
+			push_candidate_numbers(stack_set[index],temp_puzzle,row_index,col_indices[index],grid_size, type);
 			//there was no number that met the condition
 			if(num_stack_is_empty(stack_set[index]) == 1){
 				index -= 1;
@@ -230,7 +246,7 @@ RowStack * solve_row(int **puzzle, int grid_size, int row_index){
 	return rs;
 }
 
-int solve_puzzle(int **puzzle,int grid_size){
+int solve_puzzle(int **puzzle,int grid_size, int type){
 	/*
 		solves a given sudoku puzzle
 
@@ -285,7 +301,7 @@ int solve_puzzle(int **puzzle,int grid_size){
 			}
 		} else if(backtrack == 0){
 			//print_matrix(temp_puzzle,grid_size*grid_size);
-			candidate_rows[index] = solve_row(temp_puzzle, grid_size, index);
+			candidate_rows[index] = solve_row(temp_puzzle, grid_size, index, type);
 
 			if(row_stack_is_empty(candidate_rows[index]) == 1){
 				index -= 1;
