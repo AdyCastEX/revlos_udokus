@@ -28,6 +28,17 @@ function copy_puzzle(puzzle,size){
 	return copy
 }
 
+function copy_row(puzzle,row){
+	var new_row = []
+	var size = puzzle[row].length
+
+	for(var i=0;i<size;i+=1){
+		new_row.push(puzzle[row][i])
+	}
+
+	return new_row
+}
+
 function initialize_stacks(row){
 
 	stack_set = {
@@ -88,11 +99,11 @@ function update_feasible_solution(puzzle,num_stack,row_stack,solution,index,limi
 	}
 }
 
-function solve_row(puzzle,row,subgrid_size){
+function solve_row(puzzle,row,subgrid_size,type){
 	stack_set = initialize_stacks(puzzle[row])
 	row_stack = []
 	index = 0
-	temp_puzzle = copy_puzzle(puzzle,subgrid_size*subgrid_size)
+	
 	solution_size = stack_set['solution'].length
 	backtrack = 0
 
@@ -106,22 +117,22 @@ function solve_row(puzzle,row,subgrid_size){
 
 		if(backtrack == 1){
 			if(stack_set['stacks'][index].length == 0){
-				temp_puzzle[row][stack_set['col_indices'][index]] = 0
+				puzzle[row][stack_set['col_indices'][index]] = 0
 				index -= 1
 			} else{
 				column = stack_set['col_indices'][index]
-				update_feasible_solution(temp_puzzle,stack_set['stacks'][index],row_stack,stack_set['solution'],index,solution_size,row,column,subgrid_size*subgrid_size)
+				update_feasible_solution(puzzle,stack_set['stacks'][index],row_stack,stack_set['solution'],index,solution_size,row,column,subgrid_size*subgrid_size)
 				index += 1
 				backtrack = 0
 			}
 		} else if(backtrack == 0){
 			column = stack_set['col_indices'][index]
-			push_candidate_numbers(stack_set['stacks'][index],temp_puzzle,row,column,subgrid_size)
+			push_candidate_numbers(stack_set['stacks'][index],puzzle,row,column,subgrid_size)
 			if(stack_set['stacks'][index].length == 0){
 				index -= 1
 				backtrack = 1
 			}else{
-				update_feasible_solution(temp_puzzle,stack_set['stacks'][index],row_stack,stack_set['solution'],index,solution_size,row,column,subgrid_size*subgrid_size)
+				update_feasible_solution(puzzle,stack_set['stacks'][index],row_stack,stack_set['solution'],index,solution_size,row,column,subgrid_size*subgrid_size)
 				index += 1
 			}
 		}
@@ -131,4 +142,58 @@ function solve_row(puzzle,row,subgrid_size){
 		//console.log(temp_puzzle)
 	}
 	return row_stack
+}
+
+function solve_puzzle(puzzle,subgrid_size,type){
+
+	var candidate_rows = []
+	var index = 0
+	var backtrack = 0
+	var num_solutions = 0
+	grid_size = subgrid_size * subgrid_size
+	var temp_puzzle = copy_puzzle(puzzle,grid_size)
+
+	for(var i=0;i<grid_size;i+=1){
+		candidate_rows.push([])
+	}
+
+	//console.log(candidate_rows)
+	
+	//console.log(candidate_rows)
+
+	while(index > -1){
+		console.log("index: "+index)
+		if(index >= grid_size){
+			backtrack = 1
+			index -= 1
+			if(index == grid_size-1)
+			{	
+				
+				num_solutions += 1
+			}
+			continue;
+		}
+
+		if(backtrack == 1){
+			if(candidate_rows[index].length == 0){
+				temp_puzzle[index] = copy_row(puzzle,index)
+				index -= 1
+			} else{
+				temp_puzzle[index] = candidate_rows[index].pop()
+				console.log(temp_puzzle)
+				index += 1
+				backtrack = 0
+			}
+		} else{
+			candidate_rows[index] = solve_row(temp_puzzle,index,subgrid_size,type)
+			if(candidate_rows[index].length == 0){
+				index -= 1
+				backtrack = 1
+			} else{
+				temp_puzzle[index] = candidate_rows[index].pop()
+				index += 1
+			}
+		}
+	}
+	console.log(num_solutions)
 }
