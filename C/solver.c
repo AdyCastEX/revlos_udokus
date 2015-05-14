@@ -11,7 +11,7 @@ main(){
 	int num_puzzles;
 	int i,j;
 
-	char filename[] = "puzzle6.in";
+	char filename[] = "puzzle7.in";
 
 	boards = createBoard(&num_puzzles,&subgrids,filename);
 
