@@ -3,7 +3,7 @@
 #include "board.h"
 #include "solver.h"
 
-main(){
+main(int argc, char** argv){
 
 	int **puzzles;
 	int ***boards;
@@ -11,9 +11,9 @@ main(){
 	int num_puzzles;
 	int i,j;
 
-	char filename[] = "puzzle7.in";
+	//char filename[] = argv[1];//"puzzle7.in";
 
-	boards = createBoard(&num_puzzles,&subgrids,filename);
+	boards = createBoard(&num_puzzles,&subgrids,argv[1]);
 
 	for(i=0;i<num_puzzles;i+=1){	
 		//printGrid(boards[i],subgrids[i]*subgrids[i]);

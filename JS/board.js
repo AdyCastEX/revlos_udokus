@@ -1,10 +1,14 @@
 window.onload = function() {
 
-	var numPuz=0;
-	var subGrids=[];	
-	var puzzleArray=[];
+	numPuz=0;
+	subGrids=[];	
+	puzzleArray=[];
 	
 	fileInput.addEventListener('change', function(e) {
+		numPuz=0
+		subGrids=[]	
+		puzzleArray=[]
+
 		var fileInput = document.getElementById('fileInput');
 		var fileDisplayArea = document.getElementById('fileDisplayArea');
 
@@ -34,5 +38,4 @@ window.onload = function() {
 		}
 		reader.readAsText(file);	
 	});
-	
 }

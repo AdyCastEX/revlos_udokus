@@ -61,13 +61,28 @@ function initialize_stacks(row){
 
 }
 
-function push_candidate_numbers(stack,puzzle,row,col,subgrid_size){
+function push_candidate_numbers(stack,puzzle,row,col,subgrid_size,type){
 	grid_size = subgrid_size * subgrid_size
 
 
 	for(var i=1;i<=grid_size;i+=1){
 		if(check_row(i,puzzle,row,grid_size) && check_column(i,puzzle,col,grid_size) && check_grid(i, puzzle, row, col, subgrid_size)){
-			stack.push(i)
+			
+			if(type === "x"){
+				if(check_x(grid_size, puzzle,i,row,col)){
+					stack.push(i)
+				}
+			} else if(type === "y"){
+				if(check_y(grid_size, puzzle,i,row,col)){
+					stack.push(i)
+				}
+			} else if(type === "xy"){
+				if(check_x(grid_size, puzzle,i,row,col) && check_y(grid_size, puzzle,i,row,col)){
+					stack.push(i)
+				}
+			} else {
+				stack.push(i)
+			}
 		}
 	}
 
@@ -100,6 +115,9 @@ function update_feasible_solution(puzzle,num_stack,row_stack,solution,index,limi
 }
 
 function solve_row(puzzle,row,subgrid_size,type){
+
+	//console.log(puzzle)
+
 	stack_set = initialize_stacks(puzzle[row])
 	row_stack = []
 	index = 0
@@ -127,7 +145,7 @@ function solve_row(puzzle,row,subgrid_size,type){
 			}
 		} else if(backtrack == 0){
 			column = stack_set['col_indices'][index]
-			push_candidate_numbers(stack_set['stacks'][index],puzzle,row,column,subgrid_size)
+			push_candidate_numbers(stack_set['stacks'][index],puzzle,row,column,subgrid_size,type)
 			if(stack_set['stacks'][index].length == 0){
 				index -= 1
 				backtrack = 1
@@ -137,16 +155,29 @@ function solve_row(puzzle,row,subgrid_size,type){
 			}
 		}
 
-		//console.log(index)
-		//console.log(stack_set)
-		//console.log(temp_puzzle)
 	}
 	return row_stack
+}
+
+function check_zeros(row,grid_size){
+	for(var i=0;i<grid_size;i+=1){
+		if(row[i] == 0){
+			return true
+		}
+	}
+	return false
+}
+
+function print_puzzle(puzzle,grid_size){
+	for(var i=0;i<grid_size;i+=1){
+		console.log(puzzle[i])
+	}
 }
 
 function solve_puzzle(puzzle,subgrid_size,type){
 
 	var candidate_rows = []
+	var solutions = []
 	var index = 0
 	var backtrack = 0
 	var num_solutions = 0
@@ -157,18 +188,14 @@ function solve_puzzle(puzzle,subgrid_size,type){
 		candidate_rows.push([])
 	}
 
-	//console.log(candidate_rows)
-	
-	//console.log(candidate_rows)
-
 	while(index > -1){
-		console.log("index: "+index)
+		//console.log("index: "+index)
 		if(index >= grid_size){
 			backtrack = 1
 			index -= 1
 			if(index == grid_size-1)
 			{	
-				
+				solutions.push(copy_puzzle(temp_puzzle,grid_size))
 				num_solutions += 1
 			}
 			continue;
@@ -176,24 +203,34 @@ function solve_puzzle(puzzle,subgrid_size,type){
 
 		if(backtrack == 1){
 			if(candidate_rows[index].length == 0){
-				temp_puzzle[index] = copy_row(puzzle,index)
+				temp_puzzle[index] = puzzle[index]
 				index -= 1
 			} else{
 				temp_puzzle[index] = candidate_rows[index].pop()
-				console.log(temp_puzzle)
 				index += 1
 				backtrack = 0
 			}
-		} else{
-			candidate_rows[index] = solve_row(temp_puzzle,index,subgrid_size,type)
-			if(candidate_rows[index].length == 0){
-				index -= 1
-				backtrack = 1
-			} else{
-				temp_puzzle[index] = candidate_rows[index].pop()
+		} else {
+			//solve the row only if there are zeros
+			if(check_zeros(temp_puzzle[index],grid_size)){
+				candidate_rows[index] = solve_row(temp_puzzle,index,subgrid_size,type)
+				if(candidate_rows[index].length == 0){
+					index -= 1
+					backtrack = 1
+				} else{
+					temp_puzzle[index] = candidate_rows[index].pop()
+					index += 1
+				}
+			} else{ //skip solving the row
 				index += 1
 			}
 		}
 	}
-	console.log(num_solutions)
+
+	var result = {
+		'solutions' : solutions,
+		'num_solutions' : num_solutions
+	}
+
+	return result
 }
