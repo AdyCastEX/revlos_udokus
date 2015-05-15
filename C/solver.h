@@ -301,8 +301,8 @@ int solve_puzzle(int **puzzle,int grid_size, int type){
 		}
 
 		if(backtrack == 1){
-			if(count_zeros(temp_puzzle, colSize, index) == 1)
-			{
+			//if(count_zeros(temp_puzzle, colSize, index) == 1)
+			//{
 				if(row_stack_is_empty(candidate_rows[index]) == 1){
 					temp_puzzle = add_row_to_puzzle(temp_puzzle,puzzle[index], colSize, index); //reset to orig row
 					index -= 1;
@@ -313,8 +313,8 @@ int solve_puzzle(int **puzzle,int grid_size, int type){
 					index += 1;
 					backtrack = 0;
 				}
-			}
-			else index -= 1;
+			//}
+			//else index -= 1;
 		} else if(backtrack == 0){
 			//print_matrix(temp_puzzle,grid_size*grid_size);
 
@@ -332,8 +332,7 @@ int solve_puzzle(int **puzzle,int grid_size, int type){
 					index += 1;
 				}
 			}
-			else
-				index += 1;
+			else index += 1;
 		}
 		//print_matrix(temp_puzzle,grid_size*grid_size);
 	}while (index > -1);

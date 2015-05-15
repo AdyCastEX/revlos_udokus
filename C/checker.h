@@ -56,22 +56,39 @@ int checkX(int noRow, int **puzzle, int x, int row, int col)
 {
 	int i;
 
-	if(row == col)
-	{
-		for(i=0; i<noRow; i++)
+
+	if(noRow%2==1){
+		if((row == col) || ((noRow-1) == (row+col)))
 		{
-			// for the negative sloped line of the X
-			if(puzzle[i][i] == x)
-				return 0;
+			//printf("row: %d; col: %d; x: %d\n", row, col, x);
+			/*for(i=0; i<noRow; i++)
+			{
+				// for the negative sloped line of the X
+				if(puzzle[i][i] == x)
+					return 0;
+			}*/
+			for(i=0;i<noRow;i++)
+				if(puzzle[i][i] == x || puzzle[noRow-1-i][i]==x) return 0;
+
 		}
-	}
-	else if(col == (noRow-1-row))
-	{
-		for(i=0; i<noRow; i++)
+	}else{
+		if(row == col)
 		{
-			// for the positive sloped line of the X
-			if(puzzle[i][(noRow-1)-i] == x)
-				return 0;
+			for(i=0; i<noRow; i++)
+			{
+				// for the negative sloped line of the X
+				if(puzzle[i][i] == x)
+					return 0;
+			}
+		}
+		else if(col == (noRow-1-row))
+		{
+			for(i=0; i<noRow; i++)
+			{
+				// for the positive sloped line of the X
+				if(puzzle[i][(noRow-1)-i] == x)
+					return 0;
+			}
 		}
 	}
 	return 1;
