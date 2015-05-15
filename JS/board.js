@@ -3,6 +3,7 @@ window.onload = function() {
 	numPuz=0;
 	subGrids=[];	
 	puzzleArray=[];
+	all_solutions = [];
 	
 	fileInput.addEventListener('change', function(e) {
 		numPuz=0
@@ -38,4 +39,22 @@ window.onload = function() {
 		}
 		reader.readAsText(file);	
 	});
+
+	var solve_button = document.getElementById('solve_button')
+	solve_button.addEventListener('click',function(e){
+		all_solutions = []
+		for(var i=0;i<numPuz;i+=1){
+			var regular = solve_puzzle(puzzleArray[i],subGrids[i],"regular")
+			var x = solve_puzzle(puzzleArray[i],subGrids[i],"x")
+			var y = solve_puzzle(puzzleArray[i],subGrids[i],"y")
+			var xy = solve_puzzle(puzzleArray[i],subGrids[i],"xy")
+			var results = {
+				'regular' : regular,
+				'x' : x,
+				'y' : y,
+				'xy' : xy
+			}
+			all_solutions.push(results)
+		}
+	})
 }
