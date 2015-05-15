@@ -47,7 +47,7 @@ function check_x(num_row, puzzle,x,row,col)
 		if((row == col) || ((num_row-1) == (row+col)))
 		{
 			for(var i=0;i<num_row;i++)
-				if(puzzle[i][i] == x || puzzle[num_row-1-i][i]==x) return true
+				if(puzzle[i][i] == x || puzzle[num_row-1-i][i]==x) return false
 
 		}
 	}else{
