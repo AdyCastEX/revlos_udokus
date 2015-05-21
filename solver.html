@@ -1,19 +1,110 @@
 <!DOCTYPE html>
-
 <html>
 	<head>
-		<title>Sudoku XY Solver</title>
-		<link rel="stylesheet" type="text/css" href="CSS/test.css" />
-		
-	</head>
-	<body>
-		<div id="data">
-			<input type="file" id="fileInput"/>
-			<input type="button" id="solve_button" value="Solve"/>
-		</div>
-		<div id="fileDisplayArea"> </div>
+		<title>CMSC 142 Project - Sudoku XY</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- CSS -->
+    	<link href="CSS/bootstrap.css" rel="stylesheet" media="screen">
+    	<link href="CSS/bootstrap.min.css" rel="stylesheet" media="screen">
+    	<link href="CSS/bootstrap-theme.css" rel="stylesheet" media="screen">
+    	<link href="CSS/bootstrap-theme.min.css" rel="stylesheet" media="screen">
+    	<link href="CSS/style.css" rel="stylesheet" type="text/css">
+
+    	<!-- JS -->
+    	<script type="text/javascript" src="JS/jquery-1.11.0.min.js" ></script>
+		<script type="text/javascript" src="JS/bootstrap.js" ></script>
+		<script type="text/javascript" src="JS/bootstrap.min.js" ></script>
+		<script type="text/javascript" src="JS/math.min.js" ></script>
 		<script type="text/javascript" src="JS/checker.js" > </script>
 		<script type="text/javascript" src="JS/solver.js" > </script>
 		<script type="text/javascript" src="JS/board.js" > </script>
+	</head>
+	
+	<body>
+		<button class="btn btn-warning" onClick="javascript:window.location.href='main.html'" type="submit">
+			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+		</button>
+
+		<div class="page">
+			<div class="header"><h1>Sudoku XY</h1></div>
+
+			<form role="form" name="puzzleForm">
+				<div class="puzzle_field">
+					<fieldset id="orig_puzzle">
+						<legend>Original Puzzle</legend>
+						<table class="table table-bordered" id="main_board">
+
+						</table>
+						<br>
+					</fieldset>
+
+					<fieldset>
+						<center>
+							<div class="form-inline">
+								<input type="file" class="form-control" id="fileInput"/>&nbsp;&nbsp;&nbsp;
+								
+								Puzzle No.: 
+								<div class="btn-group">
+								  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+								  <span class="caret"></span>
+								  </button>
+								  <ul class="dropdown-menu" role="menu">
+								    <li><a href="#">1</a></li>
+								    <li><a href="#">2</a></li>
+								    <li><a href="#">3</a></li>
+								  </ul>
+								</div>&nbsp;&nbsp;&nbsp;
+
+								<input class="btn btn-success" type="button" id="solve_button" value="Solve"/>
+							</div>
+						</center>
+					</fieldset>
+				</div><br>
+			</form>
+
+			<div id="solution_field">
+				<div class="summary">
+					<fieldset>
+						<legend>Summary of Solutions</legend>
+						No. of Regular Solutions:<p id="reg_sol"></p>
+						No. of X Solutions:<p id="x_sol"></p>
+						No. of Y Solutions:<p id="y_sol"></p>
+						No. of XY Solutions:<p id="xy_sol"></p>
+					</fieldset>
+
+					<fieldset>
+						<legend>Solution Type</legend>
+						<div class="form-group">
+							<input type="radio" name="solution_type" value="regular" id="regular" checked/>
+								<label for="regular">Regular</label><br>
+							<input type="radio" name="solution_type" value="x" id="x"/>
+								<label for="x">X</label><br>
+							<input type="radio" name="solution_type" value="y" id="y"/>
+								<label for="y">Y</label><br>
+							<input type="radio" name="solution_type" value="xy" id="xy"/>
+								<label for="xy">XY</label><br>
+						</div>
+					</fieldset>
+				</div>
+
+				<div class="solution">
+					<fieldset>
+						<legend>Solutions</legend>
+						<table class="table table-bordered" id="solutions">
+
+						</table><br>
+						<center>
+							<button type="button" class="btn btn-default" onClick="prev_sol()">
+								<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+							</button>
+							<button type="button" class="btn btn-default" onClick="next_sol()">
+								<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+							</button>
+						</center>
+					</fieldset>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
