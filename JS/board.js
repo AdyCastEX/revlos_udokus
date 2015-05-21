@@ -5,6 +5,9 @@ window.onload = function() {
 	puzzleArray=[]
 	all_solutions = []
 	current_puzzle = 0
+
+	var solutions = document.getElementById('solution_field')
+	solutions.style.display = "none"
 	
 	fileInput.addEventListener('change', function(e) {
 		numPuz=0
@@ -45,6 +48,7 @@ window.onload = function() {
 
 	var solve_button = document.getElementById('solve_button')
 	solve_button.addEventListener('click',function(e){
+		solutions.style.display = ""
 		all_solutions = []
 		for(var i=0;i<numPuz;i+=1){
 			var regular = solve_puzzle(puzzleArray[i],subGrids[i],"regular")
@@ -61,7 +65,7 @@ window.onload = function() {
 		}
 	})
 
-	var prev_button = document.getElementById('prev_btn')
+	/*var prev_button = document.getElementById('prev_btn')
 	prev_button.addEventListener('click',function(e){
 		if(current_puzzle == 0){
 			current_puzzle = numPuz-1
@@ -76,7 +80,7 @@ window.onload = function() {
 		current_puzzle = Math.abs((current_puzzle+1) % numPuz)
 		console.log(current_puzzle)
 		convert_puzzle_to_board(puzzleArray[current_puzzle],subGrids[current_puzzle],$('#main_board'))
-	})
+	})*/
 }
 
 function convert_puzzle_to_board(puzzle,subgrid_size,container){
