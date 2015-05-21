@@ -12,7 +12,7 @@ window.onload = function() {
 		puzzleArray=[]
 
 		var fileInput = document.getElementById('fileInput');
-		var fileDisplayArea = document.getElementById('fileDisplayArea');
+		//var fileDisplayArea = document.getElementById('fileDisplayArea');
 
 		var file = fileInput.files[0];
 		var reader = new FileReader();
@@ -20,7 +20,7 @@ window.onload = function() {
 		var re = new RegExp(nl, 'g');
 		var k=0;
 		reader.onload = function(e) {
-			fileDisplayArea.innerHTML = "";
+			//fileDisplayArea.innerHTML = "";
 			var contents = e.target.result.split('\n');
 			numPuz = parseInt(contents[0],10);
 			
