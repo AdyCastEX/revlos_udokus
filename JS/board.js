@@ -53,33 +53,49 @@ window.onload = function() {
 		var reader = new FileReader();
 		var nl = "\n";
 		var re = new RegExp(nl, 'g');
-		var k=0;
+		var j,k,l;
 		reader.onload = function(e) {
 			//fileDisplayArea.innerHTML = "";
 			var contents = e.target.result.split('\n');
-			numPuz = parseInt(contents[0],10);
-			
+			var filelength = contents.length;
+			k=0,j=0,l=0;
+			console.log(filelength);
+			var puzzleGrid=[];
 			$('#functions').show()
 			$('#puzzleNo').empty()
-			for(var i=0; i<numPuz; i++){
-				//add item to Puzzle dropdownlist
-				var option = $("<option></option>")
-				option.append(i+1)
-				$('#puzzleNo').append(option)
+			while(k<=filelength){
 
-				var puzzleGrid=[];
-				subGrids[i] = parseInt(contents[i+1+k],10);
-				for(var j=1; j<=subGrids[i]*subGrids[i];j++){
-					var myArray = contents[i+1+k+j].split(" ");
-					for(var m=0; m<myArray.length; m++){
-						myArray[m] = parseInt(myArray[m], 10);
+				if(k<2){
+					numPuz = parseInt(contents[0],10);
+					subGrids[j] = parseInt(contents[1],10);
+					l=subGrids[j]*subGrids[j];
+				}else{
+					if(k<l+j+2){
+						//console.log(k + "--" + subGrids[j]*subGrids[j]+j+1)
+						var myArray = contents[k].split(" ");
+						for(var m=0; m<myArray.length; m++){
+							myArray[m] = parseInt(myArray[m], 10);
+						}
+						puzzleGrid.push(myArray);
+					}else if(k==filelength){
+						var option = $("<option></option>")
+						option.append(j+1)
+						$('#puzzleNo').append(option)
+						puzzleArray.push(puzzleGrid);
+					}else{
+						var option = $("<option></option>")
+						option.append(j+1)
+						$('#puzzleNo').append(option)
+						puzzleArray.push(puzzleGrid);
+						puzzleGrid=[];
+						j++;
+						subGrids[j] = parseInt(contents[k],10);
+						l+=subGrids[j]*subGrids[j];
 					}
-					puzzleGrid.push(myArray);
 				}
-				puzzleArray.push(puzzleGrid);
-				k=subGrids[i]*subGrids[i];
-				convert_puzzle_to_board(puzzleArray[current_puzzle],subGrids[current_puzzle],$("#main_board"),'main')	
+				k++;
 			}
+			convert_puzzle_to_board(puzzleArray[current_puzzle],subGrids[current_puzzle],$("#main_board"))			
 		}
 		reader.readAsText(file);
 
