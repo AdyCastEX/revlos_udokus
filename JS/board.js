@@ -283,9 +283,11 @@ function convert_puzzle_to_board(puzzle,subgrid_size,container,type){
 		$(this).ForceNumericOnly()
 		$(this).on('change',function(){
 			if($(this).val() > grid_size || $(this).val() == 0){
-				alert("no change")
+				//alert("no change")
+				$(this).val(0)
 			} else{
 				$(this).parent().data("number",$(this).val())
+				alert($(this).val())
 			}
 		})
 	})
@@ -313,4 +315,36 @@ jQuery.fn.ForceNumericOnly = function(){
                 (key >= 96 && key <= 105))
         })
     })
+}
+
+function convert_board_to_puzzle(board,subgrid_size,type){
+
+	var grid_size = subgrid_size * subgrid_size
+	var puzzle = []
+	//get all <tr> tags with the class "row"
+	var rows = $('.row')
+	//traverse through each row
+	rows.each(function(){
+		var puzzle_row = []
+		//get all elements with classes "writable" or "read_only", which give the values of the cells in the board
+		var values = $(this).find('.writable,.read_only')
+		//traverse through each element
+		$(values).each(function(){
+			//if the class is "read_only", it is a div so get the value from the inner html
+			if($(this).attr("class") == "read_only"){
+				puzzle_row.push(parseInt($(this).html(),10))
+			//if the class is "writable", it is an input field so get the value from the value attribute
+			} else if($(this).attr("class") == "writable"){
+				var w_value = parseInt($(this).val(),10)
+				//if not a number (e.g. blank) or an invalid number (e.g. 10 for a 9x9 sudoku puzzle), default value to 0 (empty)
+				if(isNaN(w_value) || w_value > grid_size){
+					w_value = 0
+				}
+				puzzle_row.push(w_value)
+			}
+		})
+		puzzle.push(puzzle_row)
+	})
+
+	return puzzle
 }
