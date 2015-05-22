@@ -12,8 +12,7 @@
     	<link href="CSS/style.css" rel="stylesheet" type="text/css">
 
     	<!-- JS -->
-    	<script type="text/javascript" src="JS/jquery-1.11.0.min.js" ></script>
-		<script type="text/javascript" src="JS/bootstrap.js" ></script>
+    	<script type="text/javascript" src="JS/jquery-1.11.3.min.js" ></script>
 		<script type="text/javascript" src="JS/bootstrap.min.js" ></script>
 		<script type="text/javascript" src="JS/math.min.js" ></script>
 		<script type="text/javascript" src="JS/checker.js" > </script>
@@ -23,11 +22,11 @@
 	
 	<body>
 		<button class="btn btn-warning" onClick="javascript:window.location.href='main.html'" type="submit">
-			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+			<span class="glyphicon glyphicon-home" aria-hidden="true"> Home</span>
 		</button>
 
 		<div class="page">
-			<div class="header"><h1>Sudoku XY</h1></div>
+			<div class="header"><h3>Sudoku XY</h3></div>
 
 			<form role="form" name="puzzleForm">
 				<div class="puzzle_field">
@@ -36,27 +35,42 @@
 						<table class="table table-bordered" id="main_board">
 
 						</table>
-						<br>
 					</fieldset>
 
 					<fieldset>
 						<center>
 							<div class="form-inline">
-								<input type="file" class="form-control" id="fileInput"/>&nbsp;&nbsp;&nbsp;
+								<input type="file" class="form-control" id="fileInput"/><br><br>
 								
-								Puzzle No.: 
-								<div class="btn-group">
-								  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-								  <span class="caret"></span>
-								  </button>
-								  <ul class="dropdown-menu" role="menu">
-								    <li><a href="#">1</a></li>
-								    <li><a href="#">2</a></li>
-								    <li><a href="#">3</a></li>
-								  </ul>
-								</div>&nbsp;&nbsp;&nbsp;
+								<div id="functions" class="form-inline">
+									<div class="sudoku_type">
+										<fieldset>
+											<legend>Sudoku Type</legend>
+											<div class="form-group">
+												<input type="radio" name="solution_type" value="regular" id="regular" checked/>
+													<label for="regular">Regular</label><br>
+												<input type="radio" name="solution_type" value="x" id="x"/>
+													<label for="x">X</label><br>
+												<input type="radio" name="solution_type" value="y" id="y"/>
+													<label for="y">Y</label><br>
+												<input type="radio" name="solution_type" value="xy" id="xy"/>
+													<label for="xy">XY</label><br>
+											</div>
+										</fieldset>
+									</div>
+									
+									<div class="sudoku_nav">
+										Puzzle No.:
+										<div class="form-group">
+											<select class="form-control" id="puzzleNo">
+										    </select>
+										</div>&nbsp;&nbsp;&nbsp;
 
-								<input class="btn btn-success" type="button" id="solve_button" value="Solve"/>
+										<input class="btn btn-primary" type="button" id="check_button" value="Check"/>
+										<input class="btn btn-warning" type="button" id="reset_button" value="Reset"/>
+										<input class="btn btn-success" type="button" id="solve_button" value="Show Solutions"/>
+									</div>
+								</div>
 							</div>
 						</center>
 					</fieldset>
@@ -67,41 +81,32 @@
 				<div class="summary">
 					<fieldset>
 						<legend>Summary of Solutions</legend>
-						No. of Regular Solutions:<p id="reg_sol"></p>
-						No. of X Solutions:<p id="x_sol"></p>
-						No. of Y Solutions:<p id="y_sol"></p>
-						No. of XY Solutions:<p id="xy_sol"></p>
-					</fieldset>
-
-					<fieldset>
-						<legend>Solution Type</legend>
-						<div class="form-group">
-							<input type="radio" name="solution_type" value="regular" id="regular" checked/>
-								<label for="regular">Regular</label><br>
-							<input type="radio" name="solution_type" value="x" id="x"/>
-								<label for="x">X</label><br>
-							<input type="radio" name="solution_type" value="y" id="y"/>
-								<label for="y">Y</label><br>
-							<input type="radio" name="solution_type" value="xy" id="xy"/>
-								<label for="xy">XY</label><br>
-						</div>
-					</fieldset>
+						<div id="reg_sol">No. of Regular Solutions:</div>
+						<div id="x_sol">No. of X Solutions:</div>
+						<div id="y_sol">No. of Y Solutions:</div>
+						<div id="xy_sol">No. of XY Solutions:</div>
+					</fieldset><br>
 				</div>
 
 				<div class="solution">
 					<fieldset>
 						<legend>Solutions</legend>
+						<div id="sol_text"></div>
 						<table class="table table-bordered" id="solutions">
+							
+						</table>
 
-						</table><br>
-						<center>
-							<button type="button" class="btn btn-default" onClick="prev_sol()">
-								<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-							</button>
-							<button type="button" class="btn btn-default" onClick="next_sol()">
-								<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-							</button>
-						</center>
+						<div id="nav_button">
+							<center>
+								<div id="sol_counter"></div>
+								<button type="button" class="btn btn-default" onClick="prev_sol()" id="prev_button">
+									<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+								</button>
+								<button type="button" class="btn btn-default" onClick="next_sol()" id="next_button">
+									<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+								</button>
+							</center>
+						</div>
 					</fieldset>
 				</div>
 			</div>

@@ -22,11 +22,12 @@ fieldset legend
   text-align: center;
 }
 
-.summary
+.summary, .sudoku_type
 {
 	width: 240px;
 	float: left;
 	margin-right: 10px;
+	text-align: left;
 }
 
 .solution
@@ -35,3 +36,19 @@ fieldset legend
 	float: left;
 }
 
+#main_board td, #solutions td
+{
+	width: 15px;
+	text-align: center;
+}
+
+#main_board .writable
+{
+	width: 25px;
+}
+
+.sudoku_nav
+{
+	float: left;
+	width: 600px;
+}
