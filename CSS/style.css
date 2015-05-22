@@ -1,3 +1,11 @@
+body
+{
+	background-image:url("../IMAGES/bg.jpg");
+	background-size: 150%;
+	margin-top: 10px;	
+	margin-bottom: 10px;
+}
+
 .page
 {
 	width: 875px;
@@ -5,11 +13,54 @@
 	margin-right: auto;
 	position: relative;
 	padding: 10px;
+
+	padding: 10px 10px 10px;
+  	background-color: #fff;
+	border: 1px solid #e5e5e5;
+	-webkit-border-radius: 5px;
+	 -moz-border-radius: 5px;
+	      border-radius: 5px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	 -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	      box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+.home
+{
+	width: 550px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+img
+{
+	border: 1px solid #e5e5e5;
+}
+
+.credits
+{
+	width: 250px;
+	border: 0px;
 }
 
 .header
 {
-	text-align: center;
+	background-image:url("../IMAGES/banner.jpg");
+	background-size: 100%;
+	background-repeat: no-repeat;
+	width: 875px;
+	height: 250px;
+	margin-left: auto;
+	margin-right: auto;
+
+	padding: 10px 10px 10px;
+	border: 1px solid #e5e5e5;
+	-webkit-border-radius: 5px;
+	 -moz-border-radius: 5px;
+	      border-radius: 5px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	 -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	      box-shadow: 0 1px 2px rgba(0,0,0,.05);
 }
 
 #input_file
@@ -51,4 +102,85 @@ fieldset legend
 {
 	float: left;
 	width: 600px;
+}
+
+/* Base styles (regardless of theme) */
+.bs-callout {
+    margin: 10px 0;
+    padding: 15px 30px 15px 15px;
+    border-left: 5px solid #eee;
+}
+ 
+.bs-callout h4 {
+    margin-top: 0;
+}
+ 
+.bs-callout p:last-child {
+    margin-bottom: 0;
+}
+ 
+.bs-callout code,
+.bs-callout .highlight {
+    background-color: #fff;
+}
+ 
+/* Themes for different contexts */
+.bs-callout-danger {
+    background-color: #fcf2f2;
+    border-color: #dFb5b4;
+}
+ 
+.bs-callout-warning {
+    background-color: #fefbed;
+    border-color: #f1e7bc;
+}
+ 
+.bs-callout-info {
+    background-color: #f0f7fd;
+    border-color: #d0e3f0;
+}
+
+.bs-callout-success {
+    background-color: #f6ffe3;
+    border-color: #5cb85c;
+}
+ 
+.bs-callout-danger h4,
+.bs-callout-danger a.alert-link {
+    color: #B94A48;
+}
+ 
+.bs-callout-warning h4,
+.bs-callout-warning a.alert-link {
+    color: #C09853;
+}
+ 
+.bs-callout-info h4,
+.bs-callout-info a.alert-link {
+    color: #3A87AD;
+}
+
+.bs-callout-success h4,
+.bs-callout-success a.alert-link {
+    color: #3CB371;
+}
+ 
+.bs-callout a.alert-link {
+    font-weight: bold;
+}
+
+.red {
+  color: #ff1e1e ;
+}
+.yellow {
+  color: #faff1e;
+}
+.green {
+  color: #37f900;
+}
+.pink {
+  color: #f900e9;
+}
+.blue {
+  color: #0059f9;
 }
