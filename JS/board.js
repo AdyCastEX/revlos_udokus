@@ -95,7 +95,7 @@ window.onload = function() {
 				}
 				k++;
 			}
-			convert_puzzle_to_board(puzzleArray[current_puzzle],subGrids[current_puzzle],$("#main_board"))			
+			convert_puzzle_to_board(puzzleArray[current_puzzle],subGrids[current_puzzle],$("#main_board"),'main')			
 		}
 		reader.readAsText(file);
 
@@ -103,7 +103,7 @@ window.onload = function() {
 	    	current_puzzle = this.value-1
 		    current_solution = 0
 	       	convert_puzzle_to_board(puzzleArray[current_puzzle],subGrids[current_puzzle],$("#main_board"),'main')
-		    fill_solutions_summary(all_solutions[current_puzzle],$("#solutions"))
+		    fill_solutions_summary(all_solutions[current_puzzle])
 	       	displaySolution(all_solutions[current_puzzle][current_solution_type],subGrids[current_puzzle],$("#solutions"))
 	    })
 	});
@@ -131,7 +131,7 @@ window.onload = function() {
 			{
 				$('#solve_button').val('Hide Solutions')
 				$('#solution_field').show()
-				fill_solutions_summary(all_solutions[current_puzzle],$("#solutions"))
+				fill_solutions_summary(all_solutions[current_puzzle])
 				displaySolution(all_solutions[current_puzzle][current_solution_type],subGrids[current_puzzle],$("#solutions"))
 			}
 			else
@@ -177,26 +177,47 @@ function checkSudoku(orig_puzzle,subgrid_size,type)
 				row[j] = orig_puzzle[i][j]
 			else
 			{
-				row[j] = parseInt($('#'+i+'_'+j).val(),10)
+				if($.isNumeric(parseInt($('#'+i+'_'+j).val(),10)))
+					row[j] = parseInt($('#'+i+'_'+j).val(),10)
+				else
+					row[j] = parseInt(0,10)
 			}
 		}
 		new_puzzle.push(row)
 	}
+
+	var current_counter = 0;
+	var max_counter = 0;
+	var sol_index = 0;
 	
 	if(flag)
 	{
 		var sol = solve_puzzle(orig_puzzle,subgrid_size,type)
-		trial = sol
-		trial2 = new_puzzle
+		//trial = sol
+		//trial2 = new_puzzle
 		for(var k=0; k<sol['num_solutions']; k++)
 		{
+			//reset the counter 
+			current_counter = 0
+
 			for(var i=0; i<size;i++){
 				for(var j=0; j<size; j++){
-					if(sol['solutions'][k][i][j] != new_puzzle[i][j])
-						break;
+					//get the number of equal items from the puzzle
+					if(sol['solutions'][k][i][j] == new_puzzle[i][j])
+						current_counter++
 				}
 			}
+
+			//get the solution with the most number of similarities with the user's answer
+			if(current_counter > max_counter)
+			{
+				max_counter = current_counter
+				sol_index = k
+			}
 		}
+
+		//trial = convert_board_to_puzzle(new_puzzle,subgrid_size,type)
+		convert_puzzle_to_board(new_puzzle,subgrid_size,$("#main_board"),sol_index)
 	}
 }
 
@@ -259,7 +280,7 @@ function fill_solutions_summary(puzzle)
 
 function convert_puzzle_to_board(puzzle,subgrid_size,container,type){
 	var grid_size = subgrid_size * subgrid_size
-
+	
 	$(container).empty()
 
 	for(var i=0;i<grid_size;i+=1){
@@ -271,21 +292,54 @@ function convert_puzzle_to_board(puzzle,subgrid_size,container,type){
 			col.attr("id","c"+i+j)
 			col.attr("class","col")
 
-			if(puzzle[i][j] != 0){
-				var read_only = $("<div></div>")
-				read_only.attr("class","read_only")
-				read_only.html(puzzle[i][j])
+			if((type == 'solution' || type == 'main'))
+			{
+				if(puzzle[i][j] != 0){
+					var read_only = $("<div></div>")
+					read_only.attr("class","read_only")
+					read_only.html(puzzle[i][j])
 
-				if(type == 'solution' && puzzleArray[current_puzzle][i][j] == 0)
-					col.css("background-color", '#c5e7f4')
+					if(type == 'solution' && puzzleArray[current_puzzle][i][j] == 0)
+						col.css("background-color", '#c5e7f4')
 
-				col.append(read_only)
-			} else {
-				var writable = $("<input/>")
-				writable.attr("type","text")
-				writable.attr("class","writable")
-				writable.attr("id",i+"_"+j)
-				col.append(writable)
+					col.append(read_only)
+				} else {
+					var writable = $("<input/>")
+					writable.attr("type","text")
+					writable.attr("class","writable")
+					writable.attr("id",i+"_"+j)
+
+					col.append(writable)
+				}
+			}
+			else
+			{
+				var sol = solve_puzzle(puzzleArray[current_puzzle],subgrid_size,current_solution_type)
+
+				//display the number of the cell from the original puzzle
+				if(puzzleArray[current_puzzle][i][j] != 0)
+				{
+					var read_only = $("<div></div>")
+					read_only.attr("class","read_only")
+					read_only.html(puzzle[i][j])
+					col.append(read_only)
+				}
+				else
+				{
+					var writable = $("<input/>")
+					writable.attr("type","text")
+					writable.attr("class","writable")
+					writable.attr("id",i+"_"+j)
+
+					if(sol['solutions'][type][i][j] != puzzle[i][j])
+						col.css("color", '#F00')
+					else
+						col.css("color", '#0F0')
+
+					writable.val(puzzle[i][j])
+
+					col.append(writable)
+				}
 			}
 
 			col.data("number",puzzle[i][j])
@@ -298,12 +352,13 @@ function convert_puzzle_to_board(puzzle,subgrid_size,container,type){
 	$(".writable").each(function(){
 		$(this).ForceNumericOnly()
 		$(this).on('change',function(){
+			$(this).css("color", "#000")
 			if($(this).val() > grid_size || $(this).val() == 0){
 				//alert("no change")
 				$(this).val(0)
 			} else{
 				$(this).parent().data("number",$(this).val())
-				alert($(this).val())
+				//alert($(this).val())
 			}
 		})
 	})
