@@ -93,45 +93,47 @@
 										<input class="btn btn-success" type="button" id="solve_button" value="Show Solutions"/>
 									</div>
 								</div>
+
+								<div id="solution_field" class="form-inline">
+									<div class="summary">
+										<fieldset>
+											<legend>Summary of Solutions</legend>
+											<div id="reg_sol">No. of Regular Solutions:</div>
+											<div id="x_sol">No. of X Solutions:</div>
+											<div id="y_sol">No. of Y Solutions:</div>
+											<div id="xy_sol">No. of XY Solutions:</div>
+										</fieldset><br>
+									</div>
+
+									<div class="solution">
+										<fieldset>
+											<legend>Solutions</legend>
+											<div id="sol_text"></div>
+											<table class="table table-bordered" id="solutions">
+												
+											</table>
+
+											<div id="nav_button">
+												<center>
+													<div id="sol_counter"></div>
+													<button type="button" class="btn btn-default" onClick="prev_sol()" id="prev_button">
+														<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+													</button>
+													<button type="button" class="btn btn-default" onClick="next_sol()" id="next_button">
+														<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+													</button>
+												</center>
+											</div>
+										</fieldset>
+									</div>
+								</div>
 							</div>
 						</center>
 					</fieldset>
 				</div><br>
+
+
 			</form>
-
-			<div id="solution_field">
-				<div class="summary">
-					<fieldset>
-						<legend>Summary of Solutions</legend>
-						<div id="reg_sol">No. of Regular Solutions:</div>
-						<div id="x_sol">No. of X Solutions:</div>
-						<div id="y_sol">No. of Y Solutions:</div>
-						<div id="xy_sol">No. of XY Solutions:</div>
-					</fieldset><br>
-				</div>
-
-				<div class="solution">
-					<fieldset>
-						<legend>Solutions</legend>
-						<div id="sol_text"></div>
-						<table class="table table-bordered" id="solutions">
-							
-						</table>
-
-						<div id="nav_button">
-							<center>
-								<div id="sol_counter"></div>
-								<button type="button" class="btn btn-default" onClick="prev_sol()" id="prev_button">
-									<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-								</button>
-								<button type="button" class="btn btn-default" onClick="next_sol()" id="next_button">
-									<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-								</button>
-							</center>
-						</div>
-					</fieldset>
-				</div>
-			</div>
 		</div>
 	</body>
 </html>

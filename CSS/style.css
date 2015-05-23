@@ -6,6 +6,16 @@ body
 	margin-bottom: 10px;
 }
 
+#solution_field
+{
+	background-color: #fff;
+}
+
+#functions
+{
+	height: 170px;
+}
+
 .page
 {
 	width: 875px;
@@ -81,7 +91,7 @@ fieldset legend
 	text-align: left;
 }
 
-.solution
+.solution, .sudoku_nav
 {
 	width: 600px;
 	float: left;
@@ -96,12 +106,6 @@ fieldset legend
 #main_board .writable
 {
 	width: 25px;
-}
-
-.sudoku_nav
-{
-	float: left;
-	width: 600px;
 }
 
 /* Base styles (regardless of theme) */
