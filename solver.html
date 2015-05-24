@@ -10,9 +10,11 @@
     	<link href="CSS/bootstrap-theme.css" rel="stylesheet" media="screen">
     	<link href="CSS/bootstrap-theme.min.css" rel="stylesheet" media="screen">
     	<link href="CSS/style.css" rel="stylesheet" type="text/css">
+    	<link href="JS/jquery-ui-1.11.4.custom/jquery-ui.css" rel="stylesheet">
 
     	<!-- JS -->
-    	<script type="text/javascript" src="JS/jquery-1.11.3.min.js" ></script>
+    	<script type="text/javascript" src="JS/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
+		<script type="text/javascript" src="JS/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
 		<script type="text/javascript" src="JS/bootstrap.min.js" ></script>
 		<script type="text/javascript" src="JS/math.min.js" ></script>
 		<script type="text/javascript" src="JS/checker.js" > </script>
@@ -64,7 +66,7 @@
 							<div class="form-inline">
 								<input type="file" class="form-control" id="fileInput"/><br><br>
 								
-								<div id="functions" class="form-inline">
+								<div id="functions">
 									<div class="sudoku_type">
 										<fieldset>
 											<legend>Sudoku Type</legend>
@@ -131,7 +133,12 @@
 						</center>
 					</fieldset>
 				</div><br>
-
+			<div id="correct" title="Solution is correct.">
+        		<img src="IMAGES/correct.jpg">
+    		</div>
+    		<div id="wrong" title="Solution is wrong.">
+        		<img src="IMAGES/wrong.jpg">
+    		</div>
 
 			</form>
 		</div>
